@@ -83,6 +83,10 @@ th,td{text-align:left;padding:.55rem .7rem;border-bottom:1px solid var(--line);v
 th{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 tr:last-child td{border-bottom:0}
 .busca{width:100%;padding:.65rem .8rem;font:inherit;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);margin-bottom:.8rem}
+.cadeia{display:grid;grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));gap:.6rem;margin:0 0 .8rem}
+.cadeia>div{background:var(--tint);border-top:3px solid var(--accent);border-radius:6px;padding:.6rem .7rem;font-size:.93rem}
+.cadeia b{display:block;margin-bottom:.2rem}
+td[rowspan]{border-right:1px solid var(--line)}
 .vazio{display:none;color:var(--muted);padding:.6rem .2rem}
 footer{padding:2rem 0 3rem;color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);margin-top:2.5rem}
 @media (max-width:420px){.passo{grid-template-columns:1fr}.passo .n{width:2rem;height:2rem;font-size:1.05rem}}
@@ -103,10 +107,11 @@ footer{padding:2rem 0 3rem;color:var(--muted);font-size:.9rem;border-top:1px sol
 <ul>
   <li><a href="#problema">1 · O problema</a></li>
   <li><a href="#pecas">2 · As peças</a></li>
-  <li><a href="#categorias">3 · As 12 categorias</a></li>
-  <li><a href="#deducao-b">4 · Dedução (B)</a></li>
-  <li><a href="#deducao-a">5 · Dedução (A)</a></li>
-  <li><a href="#balanco">6 · Balanço</a></li>
+  <li><a href="#juizo">3 · O juízo</a></li>
+  <li><a href="#categorias">4 · As 12 categorias</a></li>
+  <li><a href="#deducao-b">5 · Dedução (B)</a></li>
+  <li><a href="#deducao-a">6 · Dedução (A)</a></li>
+  <li><a href="#balanco">7 · Balanço</a></li>
   <li><a href="#glossario">Glossário</a></li>
   <li><a href="#referencias">Referências</a></li>
 </ul>
@@ -178,12 +183,171 @@ footer{padding:2rem 0 3rem;color:var(--muted);font-size:.9rem;border-top:1px sol
 </section>
 
 <!-- 3 -->
+<section id="juizo">
+<div class="wrap">
+  <h2>3 · O juízo e o caminho até a categoria</h2>
+  <p class="sub">Primeiro o que é um juízo (<span class="de">Urteil</span>). Depois, como Kant extrai dele os conceitos puros do entendimento.</p>
+
+  <h3>3.1 · O que é um juízo</h3>
+
+  <div class="box">
+    <div class="rotulo">Definição lógica</div>
+    <div class="quote">
+      <div class="orig">Das Urteil ist also die mittelbare Erkenntnis eines Gegenstandes, mithin die Vorstellung einer Vorstellung desselben.</div>
+      <div class="tr">"O juízo é, portanto, o conhecimento mediato de um objeto, isto é, a representação de uma representação dele." (A68/B93, tradução livre)</div>
+    </div>
+    <p>Um conceito nunca se refere ao objeto diretamente; quem o faz é a intuição. O conceito se refere ao objeto <em>por meio de outra representação</em>. Em "todos os corpos são divisíveis", o conceito de divisível é aplicado ao conceito de corpo, e este é aplicado a certos fenômenos que nos aparecem (A68–69/B93, paráfrase).</p>
+  </div>
+
+  <div class="box">
+    <div class="rotulo">Por que o juízo é a chave do entendimento</div>
+    <p>Como o conceito só se refere ao objeto mediante outras representações, a única coisa que o entendimento pode fazer com conceitos é julgar. Por isso Kant diz que todas as ações do entendimento se reduzem a juízos e que ele pode ser representado como <b>faculdade de julgar</b> (<span class="de">Vermögen zu urteilen</span>, A69/B94). Esse é o motivo de Kant procurar os conceitos puros do entendimento <em>nos juízos</em>.</p>
+  </div>
+
+  <div class="box">
+    <div class="rotulo">Um juízo une representações</div>
+    <p>Em todo juízo há representações que são reunidas sob uma unidade. A maneira de reuni-las é uma <b>função</b> (<span class="de">Funktion</span>), a "unidade da ação de ordenar diversas representações sob uma comum" (A68/B93). Esse é o conceito central da passagem de juízo a categoria.</p>
+  </div>
+
+  <div class="box">
+    <div class="rotulo">Crítica à definição escolar (§19, B140–141)</div>
+    <p>A lógica da época definia juízo como "relação entre dois conceitos". Kant observa que isso descreve bem apenas os juízos categóricos ("S é P"). Nos hipotéticos e nos disjuntivos, o que se relaciona são <em>juízos</em>, não conceitos. Sua definição própria cobre os três casos: juízo é o modo de levar conhecimentos dados à <b>unidade objetiva da apercepção</b> (B141).</p>
+  </div>
+
+  <div class="box">
+    <div class="rotulo">O papel da cópula "é" (<span class="de">ist</span>, B141–142)</div>
+    <p>A pequena palavra "é" separa a unidade objetiva da unidade subjetiva. "O corpo é pesado" afirma que as representações de corpo e de peso estão ligadas <em>no objeto</em>, valendo para qualquer um. "Quando carrego um corpo, sinto uma pressão de peso" só registra uma sequência de percepções minhas.</p>
+    <p class="small muted">Nos <em>Prolegômenos</em> (1783, §§18–20) Kant dá nomes a essa diferença: <b>juízo de percepção</b> (<span class="de">Wahrnehmungsurteil</span>, vale só para o sujeito) e <b>juízo de experiência</b> (<span class="de">Erfahrungsurteil</span>, vale objetivamente). Ele afirma que um juízo de experiência exige, além da percepção, conceitos puros do entendimento. Essa terminologia não está na <em>Crítica</em>.</p>
+  </div>
+
+  <h3 class="titulo">3.2 · A tábua dos juízos</h3>
+  <p>Abstraindo de todo conteúdo e olhando só a forma do entendimento num juízo, Kant diz que a função de pensar se deixa reunir em <b>quatro títulos</b> (<span class="de">Titel</span>), cada um com <b>três momentos</b> (<span class="de">Momente</span>) (A70/B95). Os exemplos abaixo são meus, exceto os da "alma", que são de Kant (A72/B97).</p>
+
+  <div class="rolagem">
+  <table>
+    <thead><tr><th>Título</th><th>Forma do juízo</th><th>Exemplo</th><th>Categoria correspondente</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="3"><b>Quantidade</b><br><span class="de">Quantität</span></td><td><span class="de">allgemeine</span><br>universal</td><td>"Todo corpo é extenso."</td><td><span class="de">Einheit</span> (unidade)</td></tr>
+      <tr><td><span class="de">besondere</span><br>particular</td><td>"Alguns corpos são pesados."</td><td><span class="de">Vielheit</span> (pluralidade)</td></tr>
+      <tr><td><span class="de">einzelne</span><br>singular</td><td>"Este corpo é pesado."</td><td><span class="de">Allheit</span> (totalidade)</td></tr>
+      <tr><td rowspan="3"><b>Qualidade</b><br><span class="de">Qualität</span></td><td><span class="de">bejahende</span><br>afirmativo</td><td>"A alma é mortal."</td><td><span class="de">Realität</span> (realidade)</td></tr>
+      <tr><td><span class="de">verneinende</span><br>negativo</td><td>"A alma não é mortal."</td><td><span class="de">Negation</span> (negação)</td></tr>
+      <tr><td><span class="de">unendliche</span><br>infinito</td><td>"A alma é não-mortal."</td><td><span class="de">Limitation</span> (limitação)</td></tr>
+      <tr><td rowspan="3"><b>Relação</b><br><span class="de">Relation</span></td><td><span class="de">kategorische</span><br>categórico</td><td>"O corpo é pesado."</td><td><span class="de">Inhärenz und Subsistenz</span> (substância e acidente)</td></tr>
+      <tr><td><span class="de">hypothetische</span><br>hipotético</td><td>"Se o sol ilumina a pedra, ela esquenta."</td><td><span class="de">Kausalität und Dependenz</span> (causa e efeito)</td></tr>
+      <tr><td><span class="de">disjunktive</span><br>disjuntivo</td><td>"O triângulo é retângulo, acutângulo ou obtusângulo."</td><td><span class="de">Gemeinschaft</span> (comunidade)</td></tr>
+      <tr><td rowspan="3"><b>Modalidade</b><br><span class="de">Modalität</span></td><td><span class="de">problematische</span><br>problemático</td><td>"Pode ser que chova."</td><td><span class="de">Möglichkeit – Unmöglichkeit</span></td></tr>
+      <tr><td><span class="de">assertorische</span><br>assertórico</td><td>"Está chovendo."</td><td><span class="de">Dasein – Nichtsein</span></td></tr>
+      <tr><td><span class="de">apodiktische</span><br>apodíctico</td><td>"A soma dos ângulos de um triângulo é necessariamente de dois retos."</td><td><span class="de">Notwendigkeit – Zufälligkeit</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="note">
+    <p><b>Como ler a tabela.</b> A correspondência é por posição na tábua (A70/B95 e A80/B106). Na quantidade ela não é intuitiva, e Kant só a justifica em parte: a totalidade é a pluralidade considerada como unidade (B111).</p>
+    <p><b>Relação:</b> o juízo categórico liga dois conceitos (sujeito e predicado). O hipotético liga dois juízos, como fundamento e consequência. O disjuntivo liga juízos que se excluem e, juntos, completam a esfera de um conceito. Daí a ideia de "comunidade": as partes de um todo determinam-se reciprocamente (A73–74/B98–99, paráfrase).</p>
+    <p><b>Modalidade:</b> não acrescenta nada ao conteúdo do juízo. Mostra como a afirmação se relaciona com o pensar em geral (A74/B100).</p>
+  </div>
+
+  <h3 class="titulo">3.3 · Do juízo à categoria, em seis passos</h3>
+  <p>Esta é a dedução metafísica (§§9–12). Ela responde à pergunta "de onde vêm as categorias e por que são justamente estas?", não à pergunta "com que direito se aplicam à experiência?".</p>
+
+  <article class="passo">
+    <div class="n">A</div>
+    <div class="corpo">
+      <h3>O entendimento só sabe julgar</h3>
+      <div class="onde"><span class="de">§9 · Von der logischen Funktion des Verstandes in Urteilen</span> · A68–69/B93–94</div>
+      <div class="quote">
+        <div class="orig">Wir können aber alle Handlungen des Verstandes auf Urteile zurückführen, so dass der Verstand überhaupt als ein Vermögen zu urteilen vorgestellt werden kann.</div>
+        <div class="tr">"Podemos reduzir todas as ações do entendimento a juízos, de modo que o entendimento em geral pode ser representado como uma faculdade de julgar." (A69/B94, tradução livre)</div>
+      </div>
+      <p>Se os conceitos só servem para julgar, as formas de unidade do juízo revelam as formas de unidade que o entendimento possui.</p>
+    </div>
+  </article>
+
+  <article class="passo">
+    <div class="n">B</div>
+    <div class="corpo">
+      <h3>Listar as funções de unidade dos juízos</h3>
+      <div class="onde"><span class="de">§9</span> · A70–76/B95–101</div>
+      <p>Deixando de lado o conteúdo de cada juízo e olhando só sua forma, Kant obtém a tábua dos juízos: 4 títulos × 3 momentos = 12 funções (seção 3.2). Cada uma é um modo diferente de unir representações num juízo.</p>
+    </div>
+  </article>
+
+  <article class="passo">
+    <div class="n">C</div>
+    <div class="corpo">
+      <h3>Notar que a lógica geral não basta</h3>
+      <div class="onde"><span class="de">Einleitung zur transzendentalen Logik</span> · A76–79/B102–105</div>
+      <p>A lógica geral abstrai de todo conteúdo: só vê a forma dos juízos. Já a <b>lógica transcendental</b> (<span class="de">transzendentale Logik</span>) considera que, no conhecimento, o entendimento recebe um múltiplo da intuição, e que esse múltiplo precisa ser percorrido e reunido (<span class="de">Synthesis</span>). Esse múltiplo existe também a priori, em espaço e tempo (A76–77/B102). Há, portanto, uma síntese pura, que também precisa de regras de unidade.</p>
+    </div>
+  </article>
+
+  <article class="passo">
+    <div class="n">D</div>
+    <div class="corpo">
+      <h3>A ideia central: a mesma função, dois domínios</h3>
+      <div class="onde"><span class="de">§10 · Von den reinen Verstandesbegriffen oder Kategorien</span> · A79/B104–105</div>
+      <div class="quote">
+        <div class="orig">Dieselbe Funktion, die den verschiedenen Vorstellungen in einem Urteile Einheit gibt, die gibt auch der bloßen Synthesis verschiedener Vorstellungen in einer Anschauung Einheit.</div>
+        <div class="tr">"A mesma função que dá unidade às diversas representações num juízo dá também unidade à simples síntese de diversas representações numa intuição." (A79/B104–105, tradução livre)</div>
+      </div>
+      <p>O ponto decisivo está aqui. No juízo, a função une conceitos. Na síntese da intuição, a <em>mesma</em> função une o múltiplo dado. Expressa em geral, essa unidade é o <b>conceito puro do entendimento</b> (<span class="de">reiner Verstandesbegriff</span>).</p>
+      <p>Daí vem o número: o entendimento terá tantos conceitos puros quanto funções lógicas de julgar existirem, isto é, doze (A79/B105).</p>
+    </div>
+  </article>
+
+  <article class="passo">
+    <div class="n">E</div>
+    <div class="corpo">
+      <h3>Definir a categoria</h3>
+      <div class="onde"><span class="de">§14</span> · B128</div>
+      <div class="quote">
+        <div class="orig">Begriff von einem Gegenstande überhaupt, dadurch dessen Anschauung in Ansehung einer der logischen Funktionen zu urteilen als bestimmt angesehen wird.</div>
+        <div class="tr">"Conceito de um objeto em geral, pelo qual a intuição dele é considerada determinada com respeito a uma das funções lógicas de julgar." (B128, tradução livre)</div>
+      </div>
+      <p>Uma categoria não é, portanto, uma cópia de algo da experiência. É a função lógica de julgar, vista agora como a regra que determina como um múltiplo de intuição deve ser pensado para ser <em>um objeto</em>.</p>
+    </div>
+  </article>
+
+  <article class="passo">
+    <div class="n">F</div>
+    <div class="corpo">
+      <h3>Ler as categorias a partir da tábua</h3>
+      <div class="onde"><span class="de">§10–11</span> · A80–83/B106–116</div>
+      <p>Cada forma de juízo gera uma categoria (ver a tabela em 3.2). Kant acrescenta que a lista é <b>sistemática</b>, porque nasce de um princípio único, ao contrário da lista de Aristóteles (A81/B107). Também lista os conceitos derivados (<span class="de">Prädikabilien</span>), como "força" e "ação", que viriam das categorias combinadas com a sensibilidade ou entre si (A82/B108).</p>
+    </div>
+  </article>
+
+  <h3 class="titulo">3.4 · Um exemplo completo</h3>
+  <div class="box">
+    <p>Este é um exemplo do próprio Kant, dos <em>Prolegômenos</em> (§20), com a análise em etapas.</p>
+    <div class="cadeia">
+      <div><b>1 · Percepção</b>Percebo o sol iluminando a pedra e, depois, a pedra quente. "Se o sol ilumina a pedra, ela esquenta." Vale para mim, por associação.</div>
+      <div><b>2 · Forma lógica</b>A frase é um juízo <em>hipotético</em>: liga dois juízos como fundamento e consequência.</div>
+      <div><b>3 · Categoria</b>Aplicar essa forma ao múltiplo da intuição é pensar a sucessão como determinada, ou seja, usar a categoria de <b>causa e efeito</b>.</div>
+      <div><b>4 · Experiência</b>O juízo passa a ser "o sol esquenta a pedra", válido para qualquer um e que se refere ao objeto.</div>
+    </div>
+    <p class="small muted">A mesma passagem de uma forma de juízo à categoria correspondente vale para as demais linhas da tábua.</p>
+  </div>
+
+  <h3 class="titulo">3.5 · O que esse caminho prova e o que não prova</h3>
+  <div class="box">
+    <p><b>Prova a origem.</b> Mostra que as categorias nascem do próprio entendimento (a priori), pela mesma ação que produz os juízos. Kant diz, no §26, que a dedução metafísica estabeleceu a origem a priori das categorias pela total coincidência delas com as funções lógicas do pensar (B159, paráfrase).</p>
+    <p><b>Garante o sistema.</b> Como o entendimento é uma unidade, a lista de funções seria completa e as categorias não seriam apanhadas ao acaso.</p>
+    <p><b>Não prova a validade.</b> Saber de onde vêm as categorias não mostra que valem para objetos. Isso é tarefa da dedução transcendental, nas seções seguintes.</p>
+    <p class="small muted">Comentadores debatem se a tábua dos juízos é de fato completa e quanto ela herda da lógica escolar da época.</p>
+  </div>
+</div>
+</section>
+
+<!-- 4 -->
 <section id="categorias">
 <div class="wrap">
-  <h2>3 · As doze categorias</h2>
+  <h2>4 · As doze categorias</h2>
   <p class="sub">A dedução metafísica (§§9–12 da edição B): a tábua dos juízos serve de fio condutor (<span class="de">Leitfaden</span>) para achar as categorias.</p>
 
-  <div class="note"><b>A ponte.</b> A mesma função que dá unidade às representações num juízo dá também unidade à simples síntese de representações numa intuição. Essa unidade, expressa em conceito puro, é a categoria (A79/B104–105, paráfrase). Por isso cada categoria "corresponde" a uma forma de juízo, na mesma posição na tábua (A70/B95 e A80/B106).</div>
+  <div class="note"><b>Antes de ler.</b> A passagem do juízo à categoria está explicada em detalhe na seção 3. Aqui cada categoria aparece com o juízo que lhe corresponde na tábua (A70/B95 e A80/B106).</div>
 
   <p>Kant critica a lista de categorias de Aristóteles por ter sido reunida sem princípio (A81/B107). Sua tábua tem quatro títulos (<span class="de">Titel</span>) de três categorias cada. Em cada título, a terceira categoria resulta da combinação das duas primeiras (B110). Quantidade e qualidade são chamadas <b>matemáticas</b>; relação e modalidade, <b>dinâmicas</b> (B110).</p>
   <p class="small muted">Os exemplos abaixo são ilustrações didáticas minhas, exceto onde indicado.</p>
@@ -275,10 +439,10 @@ footer{padding:2rem 0 3rem;color:var(--muted);font-size:.9rem;border-top:1px sol
 </div>
 </section>
 
-<!-- 4 -->
+<!-- 5 -->
 <section id="deducao-b">
 <div class="wrap">
-  <h2>4 · A dedução transcendental na edição B</h2>
+  <h2>5 · A dedução transcendental na edição B</h2>
   <p class="sub">Os §§13–27, em treze passos. Os títulos alemães são os das seções do texto.</p>
 
   <div class="box">
@@ -464,10 +628,10 @@ footer{padding:2rem 0 3rem;color:var(--muted);font-size:.9rem;border-top:1px sol
 </div>
 </section>
 
-<!-- 5 -->
+<!-- 6 -->
 <section id="deducao-a">
 <div class="wrap">
-  <h2>5 · A edição A: três sínteses</h2>
+  <h2>6 · A edição A: três sínteses</h2>
   <p class="sub">A dedução de 1781 percorre outro caminho, mais próximo da psicologia das faculdades.</p>
 
   <p>No prefácio de A, Kant distingue um lado <b>objetivo</b> da dedução (a validade das categorias) e um lado <b>subjetivo</b> (as faculdades que tornam a experiência possível). A seção central (A98–110) descreve <b>três sínteses</b>, cada uma pressuposta pela seguinte.</p>
@@ -504,10 +668,10 @@ footer{padding:2rem 0 3rem;color:var(--muted);font-size:.9rem;border-top:1px sol
 </div>
 </section>
 
-<!-- 6 -->
+<!-- 7 -->
 <section id="balanco">
 <div class="wrap">
-  <h2>6 · Balanço e pontos de discussão</h2>
+  <h2>7 · Balanço e pontos de discussão</h2>
   <p class="sub">O que a dedução estabelece e onde começa o debate.</p>
 
   <div class="box">
@@ -557,6 +721,10 @@ footer{padding:2rem 0 3rem;color:var(--muted);font-size:.9rem;border-top:1px sol
       <tr><td class="de">Erfahrung</td><td>experiência</td><td>conhecimento empírico de objetos, ligado por categorias.</td></tr>
       <tr><td class="de">Wahrnehmung</td><td>percepção</td><td>consciência empírica de uma intuição.</td></tr>
       <tr><td class="de">Urteil</td><td>juízo</td><td>unidade objetiva de conhecimentos dados (B141).</td></tr>
+      <tr><td class="de">Urteilstafel</td><td>tábua dos juízos</td><td>lista das 12 formas lógicas de julgar, em 4 títulos (A70/B95).</td></tr>
+      <tr><td class="de">Titel / Moment</td><td>título / momento</td><td>os 4 grupos da tábua e os 3 membros de cada grupo.</td></tr>
+      <tr><td class="de">Wahrnehmungsurteil / Erfahrungsurteil</td><td>juízo de percepção / juízo de experiência</td><td>termos dos <em>Prolegômenos</em>: válido só para o sujeito / válido objetivamente.</td></tr>
+      <tr><td class="de">Vermögen zu urteilen</td><td>faculdade de julgar</td><td>caracterização do entendimento (A69/B94).</td></tr>
       <tr><td class="de">Funktion</td><td>função</td><td>unidade da ação de ordenar representações sob uma comum (A68/B93).</td></tr>
       <tr><td class="de">Kategorie / reiner Verstandesbegriff</td><td>categoria / conceito puro do entendimento</td><td>conceito a priori da unidade sintética do múltiplo em geral.</td></tr>
       <tr><td class="de">Deduktion</td><td>dedução</td><td>justificação jurídica de uma pretensão, aqui, do direito de uso de um conceito.</td></tr>
