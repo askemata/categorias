@@ -1,0 +1,2 @@
+# categorias
+dedução transcendental
