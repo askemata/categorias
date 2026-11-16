@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dedução das Categorias</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600&family=Spectral:ital,wght@0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+/* Layout: coluna única de leitura (máx. 46rem), trilha numerada à esquerda nos passos, cartões de categoria em grade. */
+:root{
+  --bg:#f3f4f7; --surface:#ffffff; --ink:#1a2030; --muted:#56607a; --line:#d7dbe4;
+  --accent:#1d4f91; --de:#8c2f45; --tint:#e8eef8;
+  --font-display:"Spectral",Georgia,"Times New Roman",serif;
+  --font-body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#12151c; --surface:#1a1f2a; --ink:#e6e9f0; --muted:#9aa4ba; --line:#2d3546;
+    --accent:#7fb0ee; --de:#e58ba0; --tint:#1f2a3d; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#12151c; --surface:#1a1f2a; --ink:#e6e9f0; --muted:#9aa4ba; --line:#2d3546;
+  --accent:#7fb0ee; --de:#e58ba0; --tint:#1f2a3d; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:4.2rem}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:1.0625rem;line-height:1.6}
+a{color:var(--accent)}
+a:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:46rem;margin:0 auto;padding:0 1rem}
+h1,h2,h3{font-family:var(--font-display);line-height:1.2;text-wrap:balance;margin:0}
+h1{font-size:clamp(2rem,6vw,2.9rem);font-weight:700}
+h2{font-size:1.7rem;font-weight:700}
+h3{font-size:1.25rem;font-weight:700}
+p{margin:0 0 .9rem}
+.de{font-family:var(--font-display);font-style:italic;color:var(--de);font-weight:500}
+.muted{color:var(--muted)}
+.small{font-size:.9rem}
+header.top{padding:2.5rem 0 1.5rem;border-bottom:1px solid var(--line)}
+header.top .kicker{font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
+header.top p.lead{font-size:1.15rem;margin-top:1rem}
+nav.menu{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+nav.menu ul{display:flex;gap:.25rem;list-style:none;margin:0;padding:.5rem 1rem;overflow-x:auto;max-width:46rem;margin-inline:auto;white-space:nowrap}
+nav.menu a{display:block;padding:.35rem .7rem;border-radius:999px;text-decoration:none;color:var(--ink);font-size:.95rem;font-weight:500}
+nav.menu a:hover{background:var(--tint)}
+section{padding:2.6rem 0 .5rem}
+section>.wrap>h2{margin-bottom:.4rem}
+.sub{color:var(--muted);margin-bottom:1.4rem}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1rem 1.1rem;margin:0 0 1rem}
+.note{background:var(--tint);border-left:4px solid var(--accent);border-radius:6px;padding:.8rem 1rem;margin:0 0 1rem}
+.quote{border-left:3px solid var(--de);padding:.2rem 0 .2rem 1rem;margin:0 0 1rem}
+.quote .orig{font-family:var(--font-display);font-style:italic;font-size:1.05rem}
+.quote .tr{color:var(--muted);font-size:.95rem;margin-top:.2rem}
+.ref{font-size:.82rem;color:var(--muted);letter-spacing:.02em}
+ol.trilha{margin:0 0 1rem;padding-left:1.3rem}
+ol.trilha li{margin-bottom:.35rem}
+/* Passos da dedução */
+.passo{display:grid;grid-template-columns:2.6rem 1fr;gap:.8rem;margin-bottom:1.4rem}
+.passo .n{font-family:var(--font-display);font-weight:700;font-size:1.3rem;width:2.4rem;height:2.4rem;border-radius:50%;background:var(--accent);color:var(--bg);display:flex;align-items:center;justify-content:center}
+.passo .corpo{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1rem 1.1rem;min-width:0}
+.passo h3{margin-bottom:.15rem}
+.passo .onde{font-size:.85rem;color:var(--muted);margin-bottom:.8rem}
+.rotulo{font-size:.78rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:.8rem 0 .2rem}
+.fase{font-family:var(--font-display);font-size:1.15rem;font-weight:700;margin:2rem 0 1rem;padding-top:1rem;border-top:2px solid var(--accent)}
+/* Categorias */
+.titulo{margin:1.8rem 0 .6rem}
+.titulo .de{font-size:1rem}
+.grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(14.5rem,1fr));gap:.8rem}
+.cat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.9rem 1rem}
+.cat h4{margin:0;font-family:var(--font-display);font-size:1.15rem}
+.cat .pt{font-weight:600;margin-bottom:.4rem}
+.cat .juizo{font-size:.88rem;color:var(--muted);border-top:1px dashed var(--line);margin-top:.5rem;padding-top:.4rem}
+.cat p{font-size:.97rem;margin:.3rem 0}
+/* Tabelas */
+.rolagem{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface);margin-bottom:1rem}
+table{border-collapse:collapse;width:100%;min-width:34rem;font-size:.95rem}
+th,td{text-align:left;padding:.55rem .7rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+tr:last-child td{border-bottom:0}
+.busca{width:100%;padding:.65rem .8rem;font:inherit;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);margin-bottom:.8rem}
+.vazio{display:none;color:var(--muted);padding:.6rem .2rem}
+footer{padding:2rem 0 3rem;color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);margin-top:2.5rem}
+@media (max-width:420px){.passo{grid-template-columns:1fr}.passo .n{width:2rem;height:2rem;font-size:1.05rem}}
+</style>
+</head>
+<body>
+
+<header class="top">
+<div class="wrap">
+  <div class="kicker">Kant · Kritik der reinen Vernunft (1781/1787)</div>
+  <h1>A dedução transcendental das categorias, passo a passo</h1>
+  <p class="lead">Um roteiro de estudo com os termos em alemão, a tradução de cada um e o encadeamento do argumento. Primeiro o problema, depois a tábua das categorias, depois a dedução propriamente dita.</p>
+  <p class="small muted">Citações seguem a paginação padrão: <b>A</b> = 1ª edição (1781), <b>B</b> = 2ª edição (1787). As traduções dos trechos em alemão são minhas e servem ao estudo; para citar em trabalho acadêmico, use uma edição publicada.</p>
+</div>
+</header>
+
+<nav class="menu" aria-label="Seções">
+<ul>
+  <li><a href="#problema">1 · O problema</a></li>
+  <li><a href="#pecas">2 · As peças</a></li>
+  <li><a href="#categorias">3 · As 12 categorias</a></li>
+  <li><a href="#deducao-b">4 · Dedução (B)</a></li>
+  <li><a href="#deducao-a">5 · Dedução (A)</a></li>
+  <li><a href="#balanco">6 · Balanço</a></li>
+  <li><a href="#glossario">Glossário</a></li>
+  <li><a href="#referencias">Referências</a></li>
+</ul>
+</nav>
+
+<main>
+
+<!-- 1 -->
+<section id="problema">
+<div class="wrap">
+  <h2>1 · O problema que a dedução resolve</h2>
+  <p class="sub">Por que Kant precisa de uma "dedução" e o que ela deve provar.</p>
+
+  <p>Kant afirma que o entendimento (<span class="de">Verstand</span>) possui conceitos puros, que não vêm da experiência: as categorias (<span class="de">Kategorien</span>), como "substância" e "causa". A pergunta é: <b>com que direito</b> esses conceitos se aplicam aos objetos que encontramos na experiência?</p>
+
+  <div class="box">
+    <div class="rotulo">Duas perguntas distintas (A84–85/B116–117)</div>
+    <p><span class="de">quid facti</span> (<span class="de">Tatfrage</span>, questão de fato): como adquirimos o conceito? Isso é assunto de psicologia.<br>
+    <span class="de">quid juris</span> (<span class="de">Rechtsfrage</span>, questão de direito): com que legitimidade (<span class="de">Befugnis</span>) usamos o conceito? Isso é o que a dedução responde.</p>
+    <p class="small muted">O próprio termo <span class="de">Deduktion</span> vem do vocabulário jurídico alemão da época: uma argumentação que justifica a legitimidade de uma pretensão. Segundo a <a href="https://plato.stanford.edu/entries/kant-transcendental/">Stanford Encyclopedia</a>, Dieter Henrich chamou atenção para isso.</p>
+  </div>
+
+  <h3>O adversário: Hume</h3>
+  <p>Hume só aceita validar um conceito se houver uma impressão sensível da qual ele seja cópia. Para "causa" ou "conexão necessária" não há tal impressão, então o conceito não teria validade objetiva. Kant descreve isso como uma tentativa de <b>dedução empírica</b> (A85/B117), que falha para esses conceitos.</p>
+  <p>Kant aceita que não há dedução empírica das categorias. Propõe então uma <b>dedução transcendental</b> (<span class="de">transzendentale Deduktion</span>): em vez de mostrar de onde o conceito vem, mostrar que ele é <b>condição</b> para que haja experiência de objetos.</p>
+
+  <div class="note"><b>A dificuldade específica.</b> Espaço e tempo se aplicam a tudo o que nos aparece, porque são a forma da nossa sensibilidade. Mas por que os objetos dados na intuição teriam de obedecer a conceitos do entendimento? Os fenômenos poderiam, em princípio, ser tais que o entendimento não os encontrasse conformes à sua unidade (A89–91/B122–123). A dedução precisa excluir essa possibilidade.</div>
+
+  <h3>O mapa do caminho</h3>
+  <ol class="trilha">
+    <li><b>Dedução metafísica</b> (<span class="de">metaphysische Deduktion</span>, A66–83/B91–116): de onde vêm as categorias e quais são. Resposta: das funções lógicas do juízo.</li>
+    <li><b>Dedução transcendental, 1º passo</b> (B §§15–21): todo múltiplo de intuição sensível, para ser unificado numa consciência, está sob as categorias.</li>
+    <li><b>Dedução transcendental, 2º passo</b> (B §§22–27): isso vale para os objetos da <em>nossa</em> intuição (espaço e tempo), logo para toda experiência possível.</li>
+  </ol>
+</div>
+</section>
+
+<!-- 2 -->
+<section id="pecas">
+<div class="wrap">
+  <h2>2 · As peças do argumento</h2>
+  <p class="sub">Quatro ideias que sustentam tudo o que vem depois.</p>
+
+  <div class="box">
+    <h3>Duas fontes, um só conhecimento</h3>
+    <p>A <b>sensibilidade</b> (<span class="de">Sinnlichkeit</span>) é receptiva (<span class="de">Rezeptivität</span>) e nos dá <b>intuições</b> (<span class="de">Anschauungen</span>). O <b>entendimento</b> (<span class="de">Verstand</span>) é espontâneo (<span class="de">Spontaneität</span>) e produz <b>conceitos</b> (<span class="de">Begriffe</span>). Conhecimento exige as duas.</p>
+    <div class="quote">
+      <div class="orig">Gedanken ohne Inhalt sind leer, Anschauungen ohne Begriffe sind blind.</div>
+      <div class="tr">"Pensamentos sem conteúdo são vazios; intuições sem conceitos são cegas."</div>
+      <div class="ref">A51/B75</div>
+    </div>
+  </div>
+
+  <div class="box">
+    <h3>O múltiplo e a síntese</h3>
+    <p>O que a intuição fornece é um <b>múltiplo</b> (<span class="de">Mannigfaltiges</span>; as traduções portuguesas variam entre "múltiplo" e "diverso"). Para virar conhecimento, esse múltiplo precisa ser percorrido e reunido: isso é a <b>síntese</b> (<span class="de">Synthesis</span>), o ato de "pôr diferentes representações umas com as outras e compreender seu múltiplo num conhecimento" (A77/B103, paráfrase). A síntese é obra da imaginação (<span class="de">Einbildungskraft</span>) sob direção do entendimento.</p>
+  </div>
+
+  <div class="box">
+    <h3>Função</h3>
+    <p>Kant chama <b>função</b> (<span class="de">Funktion</span>) "a unidade da ação de ordenar diversas representações sob uma comum" (A68/B93, paráfrase). Conceitos repousam em funções. O entendimento é a faculdade de julgar (<span class="de">Vermögen zu urteilen</span>), então suas funções de unidade aparecem nos tipos de juízo.</p>
+  </div>
+
+  <div class="box">
+    <h3>Apercepção</h3>
+    <p><b>Apercepção</b> (<span class="de">Apperzeption</span>) é a consciência de si que acompanha as representações. Quando é a consciência de que "eu" sou o mesmo em todas elas, Kant a chama <b>transcendental</b>. Esse é o ponto de partida da dedução na edição B.</p>
+  </div>
+</div>
+</section>
+
+<!-- 3 -->
+<section id="categorias">
+<div class="wrap">
+  <h2>3 · As doze categorias</h2>
+  <p class="sub">A dedução metafísica (§§9–12 da edição B): a tábua dos juízos serve de fio condutor (<span class="de">Leitfaden</span>) para achar as categorias.</p>
+
+  <div class="note"><b>A ponte.</b> A mesma função que dá unidade às representações num juízo dá também unidade à simples síntese de representações numa intuição. Essa unidade, expressa em conceito puro, é a categoria (A79/B104–105, paráfrase). Por isso cada categoria "corresponde" a uma forma de juízo, na mesma posição na tábua (A70/B95 e A80/B106).</div>
+
+  <p>Kant critica a lista de categorias de Aristóteles por ter sido reunida sem princípio (A81/B107). Sua tábua tem quatro títulos (<span class="de">Titel</span>) de três categorias cada. Em cada título, a terceira categoria resulta da combinação das duas primeiras (B110). Quantidade e qualidade são chamadas <b>matemáticas</b>; relação e modalidade, <b>dinâmicas</b> (B110).</p>
+  <p class="small muted">Os exemplos abaixo são ilustrações didáticas minhas, exceto onde indicado.</p>
+
+  <!-- Quantidade -->
+  <h3 class="titulo">Quantidade <span class="de">(Quantität)</span></h3>
+  <div class="grade">
+    <article class="cat">
+      <h4 class="de">Einheit</h4><div class="pt">Unidade</div>
+      <p>Representar algo como um só, como uma unidade de medida.</p>
+      <p>Ex.: "esta casa".</p>
+      <div class="juizo">Juízo: <span class="de">allgemeine</span> (universal)</div>
+    </article>
+    <article class="cat">
+      <h4 class="de">Vielheit</h4><div class="pt">Pluralidade</div>
+      <p>Representar como vários, composto de unidades somadas.</p>
+      <p>Ex.: "algumas casas".</p>
+      <div class="juizo">Juízo: <span class="de">besondere</span> (particular)</div>
+    </article>
+    <article class="cat">
+      <h4 class="de">Allheit</h4><div class="pt">Totalidade</div>
+      <p>A pluralidade tomada como unidade completa. Kant a descreve como pluralidade considerada como unidade (B111).</p>
+      <p>Ex.: "todas as casas desta rua".</p>
+      <div class="juizo">Juízo: <span class="de">einzelne</span> (singular)</div>
+    </article>
+  </div>
+
+  <!-- Qualidade -->
+  <h3 class="titulo">Qualidade <span class="de">(Qualität)</span></h3>
+  <div class="grade">
+    <article class="cat">
+      <h4 class="de">Realität</h4><div class="pt">Realidade</div>
+      <p>O que corresponde a uma sensação: um "algo" positivo no objeto (<span class="de">Sachheit</span>). Não significa "existência".</p>
+      <div class="juizo">Juízo: <span class="de">bejahende</span> (afirmativo)</div>
+    </article>
+    <article class="cat">
+      <h4 class="de">Negation</h4><div class="pt">Negação</div>
+      <p>Ausência daquilo que a realidade afirma.</p>
+      <div class="juizo">Juízo: <span class="de">verneinende</span> (negativo)</div>
+    </article>
+    <article class="cat">
+      <h4 class="de">Limitation</h4><div class="pt">Limitação</div>
+      <p>Realidade unida à negação: algo determinado, com grau e fronteira.</p>
+      <div class="juizo">Juízo: <span class="de">unendliche</span> (infinito). Exemplo de Kant: "a alma é não-mortal" (A72/B97).</div>
+    </article>
+  </div>
+
+  <!-- Relação -->
+  <h3 class="titulo">Relação <span class="de">(Relation)</span></h3>
+  <div class="grade">
+    <article class="cat">
+      <h4 class="de">Inhärenz und Subsistenz</h4><div class="pt">Inerência e subsistência (substância e acidente)</div>
+      <p>Algo que existe como sujeito, e algo que só existe como propriedade desse sujeito.</p>
+      <p>Ex.: "o corpo é pesado".</p>
+      <div class="juizo">Juízo: <span class="de">kategorische</span> (categórico)</div>
+    </article>
+    <article class="cat">
+      <h4 class="de">Kausalität und Dependenz</h4><div class="pt">Causalidade e dependência (causa e efeito)</div>
+      <p>Um estado se segue de outro segundo uma regra necessária: "se A, então B".</p>
+      <div class="juizo">Juízo: <span class="de">hypothetische</span> (hipotético)</div>
+    </article>
+    <article class="cat">
+      <h4 class="de">Gemeinschaft</h4><div class="pt">Comunidade (ação recíproca, <span class="de">Wechselwirkung</span>)</div>
+      <p>Coisas simultâneas que se determinam umas às outras. Na tábua de Kant: "entre o agente e o paciente".</p>
+      <div class="juizo">Juízo: <span class="de">disjunktive</span> (disjuntivo)</div>
+    </article>
+  </div>
+
+  <!-- Modalidade -->
+  <h3 class="titulo">Modalidade <span class="de">(Modalität)</span></h3>
+  <div class="grade">
+    <article class="cat">
+      <h4 class="de">Möglichkeit – Unmöglichkeit</h4><div class="pt">Possibilidade – impossibilidade</div>
+      <p>Concordar ou não com as condições formais da experiência.</p>
+      <div class="juizo">Juízo: <span class="de">problematische</span> (problemático)</div>
+    </article>
+    <article class="cat">
+      <h4 class="de">Dasein – Nichtsein</h4><div class="pt">Existência – não-ser</div>
+      <p>Estar ou não dado numa percepção, ligado à sensação.</p>
+      <div class="juizo">Juízo: <span class="de">assertorische</span> (assertórico)</div>
+    </article>
+    <article class="cat">
+      <h4 class="de">Notwendigkeit – Zufälligkeit</h4><div class="pt">Necessidade – contingência</div>
+      <p>O existente que decorre do possível segundo condições universais.</p>
+      <div class="juizo">Juízo: <span class="de">apodiktische</span> (apodíctico)</div>
+    </article>
+  </div>
+  <p class="small muted" style="margin-top:.8rem">A modalidade não acrescenta nada ao conteúdo do objeto; diz como o objeto se relaciona com nossa capacidade de conhecer. Por isso é a mais fácil de confundir com as demais.</p>
+</div>
+</section>
+
+<!-- 4 -->
+<section id="deducao-b">
+<div class="wrap">
+  <h2>4 · A dedução transcendental na edição B</h2>
+  <p class="sub">Os §§13–27, em treze passos. Os títulos alemães são os das seções do texto.</p>
+
+  <div class="box">
+    <div class="rotulo">O argumento resumido (reconstrução didática, não é citação)</div>
+    <ol class="trilha">
+      <li>A intuição me dá um múltiplo.</li>
+      <li>Esse múltiplo só é <em>meu</em>, e só vira representação para mim, se o "eu penso" puder acompanhá-lo.</li>
+      <li>Isso exige que eu ligue o múltiplo numa só consciência: uma síntese segundo regras.</li>
+      <li>Ligar o múltiplo numa consciência é referi-lo a um objeto, o que se faz em juízos.</li>
+      <li>As funções lógicas dos juízos, aplicadas ao múltiplo da intuição, são as categorias.</li>
+      <li><b>Conclusão 1:</b> todo múltiplo de intuição sensível está sob as categorias.</li>
+      <li>Nossa intuição é espacial e temporal, e apreender algo nela já supõe síntese.</li>
+      <li><b>Conclusão 2:</b> todo objeto da experiência possível está sob as categorias.</li>
+    </ol>
+  </div>
+
+  <div class="fase">Preparação</div>
+
+  <article class="passo">
+    <div class="n">1</div>
+    <div class="corpo">
+      <h3>Colocar a questão de direito</h3>
+      <div class="onde"><span class="de">§13 · Von den Prinzipien einer transzendentalen Deduktion überhaupt</span> · B116–124</div>
+      <div class="rotulo">O que Kant faz</div>
+      <p>Distingue fato e direito, rejeita a via empírica e anuncia a via transcendental (ver seção 1).</p>
+      <div class="rotulo">Termo-chave</div>
+      <p><span class="de">objektive Gültigkeit</span>: validade objetiva, isto é, o conceito vale <em>dos objetos</em>, não só dos nossos hábitos mentais.</p>
+    </div>
+  </article>
+
+  <article class="passo">
+    <div class="n">2</div>
+    <div class="corpo">
+      <h3>Mostrar que a ligação não vem dos sentidos</h3>
+      <div class="onde"><span class="de">§14 · Übergang zur transzendentalen Deduktion der Kategorien</span> e <span class="de">§15 · Von der Möglichkeit einer Verbindung überhaupt</span> · B124–131</div>
+      <div class="quote">
+        <div class="orig">Die Verbindung (conjunctio) eines Mannigfaltigen überhaupt kann niemals durch Sinne in uns kommen.</div>
+        <div class="tr">"A ligação de um múltiplo em geral nunca pode vir a nós pelos sentidos." (B129, tradução livre)</div>
+      </div>
+      <div class="rotulo">Em palavras simples</div>
+      <p>Os sentidos dão material, não ligação. Ligar é ato de espontaneidade (<span class="de">Actus der Spontaneität</span>, B130), portanto do entendimento. Kant dá a esse ato o nome geral de síntese.</p>
+      <div class="rotulo">Detalhe importante</div>
+      <p>A unidade que acompanha toda ligação não é a categoria de unidade (<span class="de">Einheit</span>). Ela vem antes de todos os conceitos de ligação e é condição deles (B131).</p>
+    </div>
+  </article>
+
+  <div class="fase">Primeiro passo: as categorias valem para toda intuição sensível</div>
+
+  <article class="passo">
+    <div class="n">3</div>
+    <div class="corpo">
+      <h3>A apercepção originária</h3>
+      <div class="onde"><span class="de">§16 · Von der ursprünglich-synthetischen Einheit der Apperzeption</span> · B131–136</div>
+      <div class="quote">
+        <div class="orig">Das: Ich denke, muss alle meine Vorstellungen begleiten können.</div>
+        <div class="tr">"O 'eu penso' tem de poder acompanhar todas as minhas representações." (B131, tradução livre)</div>
+      </div>
+      <div class="rotulo">Em palavras simples</div>
+      <p>Se alguma representação não pudesse ser pensada por mim, ela seria, para mim, impossível ou nada. Esse "eu penso" é um ato (<span class="de">Aktus der Spontaneität</span>), não uma intuição, e Kant o chama <b>apercepção pura</b> ou <b>originária</b> (<span class="de">ursprüngliche Apperzeption</span>).</p>
+      <div class="rotulo">Dois tipos de unidade</div>
+      <p><b>Unidade analítica</b> (<span class="de">analytische Einheit</span>): a identidade do "eu" como marca comum a várias representações. <b>Unidade sintética</b> (<span class="de">synthetische Einheit</span>): ter reunido essas representações numa só consciência. Kant argumenta que a analítica só é possível porque se pressupõe a sintética (B133–135). Só posso me reconhecer idêntico em muitas representações porque as <em>liguei</em>.</p>
+    </div>
+  </article>
+
+  <article class="passo">
+    <div class="n">4</div>
+    <div class="corpo">
+      <h3>O princípio supremo</h3>
+      <div class="onde"><span class="de">§17 · Der Grundsatz der synthetischen Einheit der Apperzeption ist das oberste Prinzip alles Verstandesgebrauchs</span> · B136–139</div>
+      <div class="rotulo">O princípio</div>
+      <p>Todo múltiplo da intuição está sob as condições da unidade sintética originária da apercepção (B136).</p>
+      <div class="quote">
+        <div class="orig">Objekt aber ist das, in dessen Begriff das Mannigfaltige einer gegebenen Anschauung vereinigt ist.</div>
+        <div class="tr">"Objeto é aquilo em cujo conceito está reunido o múltiplo de uma intuição dada." (B137, tradução livre)</div>
+      </div>
+      <div class="rotulo">Em palavras simples</div>
+      <p>Conhecer (<span class="de">Erkennen</span>) é referir representações a um objeto. Um objeto, por sua vez, é aquilo que unifica o múltiplo. A unidade da consciência é, portanto, o que constitui a referência a um objeto e dá às representações validade objetiva.</p>
+    </div>
+  </article>
+
+  <article class="passo">
+    <div class="n">5</div>
+    <div class="corpo">
+      <h3>Unidade objetiva e unidade subjetiva</h3>
+      <div class="onde"><span class="de">§18 · Was objektive Einheit des Selbstbewußtseins sei</span> · B139–140</div>
+      <div class="rotulo">Em palavras simples</div>
+      <p>A unidade transcendental da apercepção é <b>objetiva</b>. A unidade que depende de hábito ou de associação, a do sentido interno (<span class="de">innerer Sinn</span>), é apenas <b>subjetiva</b>: vale para mim, agora, e não para o objeto. Kant quer mostrar que a primeira não se reduz à segunda, o que bloqueia a saída humeana.</p>
+    </div>
+  </article>
+
+  <article class="passo">
+    <div class="n">6</div>
+    <div class="corpo">
+      <h3>O juízo como unidade objetiva</h3>
+      <div class="onde"><span class="de">§19 · Die logische Form aller Urteile besteht in der objektiven Einheit der Apperzeption der darin enthaltenen Begriffe</span> · B140–142</div>
+      <div class="quote">
+        <div class="orig">… ein Urteil ist nichts anderes, als die Art, gegebene Erkenntnisse zur objektiven Einheit der Apperzeption zu bringen.</div>
+        <div class="tr">"Um juízo nada mais é do que o modo de trazer conhecimentos dados à unidade objetiva da apercepção." (B141, tradução livre)</div>
+      </div>
+      <div class="rotulo">O exemplo de Kant (B142)</div>
+      <p>"O corpo é pesado" afirma algo do objeto. "Se carrego um corpo, sinto uma pressão de peso" descreve apenas minha sequência de percepções. A cópula "é" (<span class="de">ist</span>) marca a diferença: o juízo diz como as representações se relacionam <em>no objeto</em>.</p>
+    </div>
+  </article>
+
+  <article class="passo">
+    <div class="n">7</div>
+    <div class="corpo">
+      <h3>Conclusão do primeiro passo</h3>
+      <div class="onde"><span class="de">§20 · Alle sinnliche Anschauungen stehen unter den Kategorien, als Bedingungen, unter denen allein das Mannigfaltige derselben in ein Bewußtsein zusammenkommen kann</span> · B143</div>
+      <div class="rotulo">Em palavras simples</div>
+      <p>Aqui as duas deduções se encontram. As funções lógicas do juízo (da dedução metafísica) são as funções que unificam o múltiplo numa consciência. Se todo múltiplo da intuição precisa ser unificado para ser meu, e a unificação se faz pelas funções do juízo, então todo múltiplo da intuição está sob as categorias. A tábua dos juízos fornece exatamente os modos de unificação que o §16 exigia.</p>
+    </div>
+  </article>
+
+  <article class="passo">
+    <div class="n">8</div>
+    <div class="corpo">
+      <h3>O que ainda falta</h3>
+      <div class="onde"><span class="de">§21 · Anmerkung</span> · B144–145</div>
+      <div class="rotulo">Em palavras simples</div>
+      <p>Kant diz que fez apenas o <em>começo</em> da dedução. Até aqui se abstraiu da maneira como o múltiplo é dado. A conclusão vale para qualquer intuição sensível que um entendimento como o nosso possa receber, mas ainda não mostra que ela vale para <em>nossa</em> intuição, a que tem espaço e tempo. Isso exige um segundo passo.</p>
+    </div>
+  </article>
+
+  <div class="fase">Segundo passo: as categorias valem para a experiência possível</div>
+
+  <article class="passo">
+    <div class="n">9</div>
+    <div class="corpo">
+      <h3>Limite de uso das categorias</h3>
+      <div class="onde"><span class="de">§22 · Die Kategorie hat keinen andern Gebrauch zum Erkenntnisse der Dinge, als ihre Anwendung auf Gegenstände der Erfahrung</span> · B146–149 (§§22–23)</div>
+      <div class="rotulo">Em palavras simples</div>
+      <p>Pensar um objeto e conhecê-lo são coisas diferentes. Sem intuição, a categoria é só forma de pensamento sem conteúdo. Daí o resultado crítico: as categorias dão conhecimento apenas de objetos de experiência possível, não de coisas em si (<span class="de">Dinge an sich</span>).</p>
+    </div>
+  </article>
+
+  <article class="passo">
+    <div class="n">10</div>
+    <div class="corpo">
+      <h3>Imaginação e síntese figurada</h3>
+      <div class="onde"><span class="de">§24 · Von der Anwendung der Kategorien auf Gegenstände der Sinne überhaupt</span> · B150–156</div>
+      <div class="rotulo">Termos</div>
+      <p><span class="de">synthesis intellectualis</span> (<span class="de">Verstandesverbindung</span>): a síntese pensada, só no entendimento.<br>
+      <span class="de">figürliche Synthesis</span> (<span class="de">synthesis speciosa</span>): a síntese aplicada à intuição, no tempo e no espaço.</p>
+      <div class="rotulo">Em palavras simples</div>
+      <p>Para as categorias se aplicarem à intuição sensível é preciso um intermediário: a imaginação produtiva (<span class="de">produktive Einbildungskraft</span>). Ela é sensível, por lidar com intuição, e espontânea, por ser ato. É por ela que o entendimento age sobre o sentido interno, o que gera o chamado paradoxo do sentido interno: só nos conhecemos como aparecemos a nós mesmos, não como somos.</p>
+    </div>
+  </article>
+
+  <article class="passo">
+    <div class="n">11</div>
+    <div class="corpo">
+      <h3>Consciência de si</h3>
+      <div class="onde"><span class="de">§25</span> · B157–159</div>
+      <div class="rotulo">Em palavras simples</div>
+      <p>Na apercepção sei <em>que</em> eu sou (<span class="de">Dass ich bin</span>), mas isso não me dá conhecimento de <em>o que</em> sou. Para isso faltaria uma intuição do eu. A apercepção transcendental é condição do conhecimento, não um objeto conhecido.</p>
+    </div>
+  </article>
+
+  <article class="passo">
+    <div class="n">12</div>
+    <div class="corpo">
+      <h3>A dedução da experiência possível</h3>
+      <div class="onde"><span class="de">§26 · Transzendentale Deduktion des allgemein möglichen Erfahrungsgebrauchs der reinen Verstandesbegriffe</span> · B159–165</div>
+      <div class="rotulo">O argumento</div>
+      <p>Toda percepção (<span class="de">Wahrnehmung</span>) envolve apreensão (<span class="de">Apprehension</span>) do múltiplo, e apreender é sintetizar. Mesmo espaço e tempo, como intuições formais, têm unidade que o entendimento põe. Logo a síntese da apreensão tem de estar de acordo com as categorias, e tudo o que pode ser percebido está sob elas.</p>
+      <div class="rotulo">Os exemplos de Kant</div>
+      <p>Ao perceber uma <b>casa</b>, percorro suas partes numa certa ordem, mas a unidade de espaço me permite ligar essas partes como pertencentes a um objeto. Ao perceber o <b>gelo da água que congela</b>, apreendo dois estados em sucessão, e a categoria de causalidade determina que essa ordem é necessária (B162–163).</p>
+      <div class="rotulo">Consequência</div>
+      <p>As categorias prescrevem leis a priori à natureza, entendida como conjunto dos fenômenos (<span class="de">natura materialiter spectata</span>, B163). Não é a natureza que dita as categorias ao entendimento.</p>
+    </div>
+  </article>
+
+  <article class="passo">
+    <div class="n">13</div>
+    <div class="corpo">
+      <h3>O resultado</h3>
+      <div class="onde"><span class="de">§27 · Resultat dieser Deduktion der Verstandesbegriffe</span> · B165–169</div>
+      <div class="rotulo">Em palavras simples</div>
+      <p>Só há conhecimento do que é possível na experiência, e só há experiência possível pelas categorias. Kant descarta duas explicações alternativas: que a experiência produza as categorias (o que as tornaria empíricas) e que elas sejam disposições inatas pré-formadas (o que lhes tiraria a necessidade objetiva). Ele opta por um "sistema de epigênese da razão pura" (<span class="de">Epigenesis</span>): as categorias têm origem no próprio entendimento, mas só valem na experiência (B167–168).</p>
+    </div>
+  </article>
+</div>
+</section>
+
+<!-- 5 -->
+<section id="deducao-a">
+<div class="wrap">
+  <h2>5 · A edição A: três sínteses</h2>
+  <p class="sub">A dedução de 1781 percorre outro caminho, mais próximo da psicologia das faculdades.</p>
+
+  <p>No prefácio de A, Kant distingue um lado <b>objetivo</b> da dedução (a validade das categorias) e um lado <b>subjetivo</b> (as faculdades que tornam a experiência possível). A seção central (A98–110) descreve <b>três sínteses</b>, cada uma pressuposta pela seguinte.</p>
+
+  <div class="grade">
+    <article class="cat">
+      <h4 class="de">Synthesis der Apprehension in der Anschauung</h4>
+      <div class="pt">Síntese da apreensão na intuição</div>
+      <p>Percorrer e reunir o múltiplo dado no tempo. Sem isso, cada impressão ficaria isolada.</p>
+    </article>
+    <article class="cat">
+      <h4 class="de">Synthesis der Reproduktion in der Einbildung</h4>
+      <div class="pt">Síntese da reprodução na imaginação</div>
+      <p>Reter e reproduzir o que passou. Se eu perdesse as partes anteriores ao chegar às seguintes, nunca teria uma representação inteira.</p>
+    </article>
+    <article class="cat">
+      <h4 class="de">Synthesis der Rekognition im Begriffe</h4>
+      <div class="pt">Síntese da recognição no conceito</div>
+      <p>Reconhecer que o que reproduzo é o mesmo que apreendi antes. Isso exige um conceito, que dá a regra da unidade. Exemplo de Kant: a contagem, em que preciso saber que as unidades somadas pertencem à mesma série (A103).</p>
+    </article>
+  </div>
+
+  <div class="box" style="margin-top:1rem">
+    <h3>Objeto = X</h3>
+    <p>Na A, Kant explica o que é a referência a um objeto: um "algo = X" (<span class="de">Gegenstand = X</span>, A104–105), o correlato da unidade necessária da consciência. O objeto não é a coisa em si, mas o ponto para onde nossas representações convergem quando são ligadas por regra.</p>
+  </div>
+
+  <div class="box">
+    <h3>Afinidade</h3>
+    <p>A <b>afinidade</b> (<span class="de">Affinität</span>, A113–114) é o fundamento objetivo da associação: os fenômenos têm de ser tais que possam ser associados segundo regras, e isso depende da unidade transcendental da apercepção. É a resposta de Kant à associação humeana.</p>
+  </div>
+
+  <div class="note"><b>A × B.</b> A edição B reorganiza o argumento em torno do juízo e da apercepção (§§16–20) e separa explicitamente dois passos. A edição A parte das faculdades e das sínteses. Kant considerava as duas compatíveis. Comentadores discutem se a B abandona ou apenas reformula a A.</div>
+</div>
+</section>
+
+<!-- 6 -->
+<section id="balanco">
+<div class="wrap">
+  <h2>6 · Balanço e pontos de discussão</h2>
+  <p class="sub">O que a dedução estabelece e onde começa o debate.</p>
+
+  <div class="box">
+    <h3>O que Kant considera provado</h3>
+    <p>As categorias são condições de possibilidade da experiência de objetos. Elas valem a priori para tudo o que pode ser dado na experiência, e por isso respondem à pergunta <span class="de">quid juris</span>.</p>
+    <h3 style="margin-top:.8rem">O custo</h3>
+    <p>O que a dedução garante, garante só para fenômenos (<span class="de">Erscheinungen</span>). Para coisas em si, as categorias não dão conhecimento. Esse é o preço do idealismo transcendental.</p>
+  </div>
+
+  <div class="box">
+    <h3>Onde há controvérsia</h3>
+    <p>A <a href="https://plato.stanford.edu/entries/kant-transcendental/">Stanford Encyclopedia</a> observa que a dedução procura mostrar que a síntese por categorias é necessária além da associação. Se o argumento consegue isso, e se o "eu penso" exige mesmo categorias específicas e não só unidade em geral, são pontos disputados. A leitura em "dois passos" também é discutida: há quem entenda que o §20 já conclui tudo e que o §26 só especifica o caso humano.</p>
+  </div>
+</div>
+</section>
+
+<!-- Glossário -->
+<section id="glossario">
+<div class="wrap">
+  <h2>Glossário alemão–português</h2>
+  <p class="sub">Os termos de Kant, com as traduções mais usuais em português. Traduções variam; confira a opção da edição que você usa.</p>
+  <label for="filtro" class="small muted">Buscar termo</label>
+  <input id="filtro" class="busca" type="search" placeholder="Ex.: Anschauung, síntese, objeto…" autocomplete="off">
+  <div class="rolagem">
+  <table id="tab-glossario">
+    <thead><tr><th>Alemão</th><th>Português</th><th>Sentido em Kant</th></tr></thead>
+    <tbody>
+      <tr><td class="de">a priori / a posteriori</td><td>a priori / a posteriori</td><td>independente da experiência / dependente dela.</td></tr>
+      <tr><td class="de">transzendental</td><td>transcendental</td><td>relativo ao modo de conhecer objetos, quando este é possível a priori (A11–12/B25). Não confundir com "transcendente".</td></tr>
+      <tr><td class="de">Sinnlichkeit</td><td>sensibilidade</td><td>capacidade receptiva de ser afetado por objetos.</td></tr>
+      <tr><td class="de">Verstand</td><td>entendimento</td><td>faculdade dos conceitos e dos juízos; espontânea.</td></tr>
+      <tr><td class="de">Vernunft</td><td>razão</td><td>faculdade dos princípios e das ideias; distinta do entendimento.</td></tr>
+      <tr><td class="de">Anschauung</td><td>intuição</td><td>representação imediata e singular, dada pela sensibilidade.</td></tr>
+      <tr><td class="de">Begriff</td><td>conceito</td><td>representação geral, mediata, que repousa em funções.</td></tr>
+      <tr><td class="de">Vorstellung</td><td>representação</td><td>termo genérico para o conteúdo da consciência.</td></tr>
+      <tr><td class="de">Erkenntnis</td><td>conhecimento</td><td>representação referida a um objeto, com intuição e conceito.</td></tr>
+      <tr><td class="de">Mannigfaltiges</td><td>múltiplo; diverso</td><td>o conteúdo variado dado à intuição, antes de ser unificado.</td></tr>
+      <tr><td class="de">Synthesis</td><td>síntese</td><td>ato de reunir representações e compreender seu múltiplo num conhecimento (A77/B103).</td></tr>
+      <tr><td class="de">Verbindung</td><td>ligação; conexão; combinação</td><td>a unificação do múltiplo; sempre obra do entendimento (§15).</td></tr>
+      <tr><td class="de">Einbildungskraft</td><td>imaginação</td><td>faculdade de representar um objeto mesmo sem sua presença; media sensibilidade e entendimento.</td></tr>
+      <tr><td class="de">Apperzeption</td><td>apercepção</td><td>consciência de si que acompanha as representações.</td></tr>
+      <tr><td class="de">ursprünglich-synthetische Einheit der Apperzeption</td><td>unidade sintética originária da apercepção</td><td>o ponto supremo da dedução em B (§16–17).</td></tr>
+      <tr><td class="de">Selbstbewusstsein</td><td>autoconsciência; consciência de si</td><td>consciência da identidade do "eu" ao longo das representações.</td></tr>
+      <tr><td class="de">Gegenstand / Objekt</td><td>objeto</td><td>aquilo em cujo conceito o múltiplo está unido (B137).</td></tr>
+      <tr><td class="de">Erscheinung</td><td>fenômeno; aparição</td><td>o objeto indeterminado de uma intuição empírica.</td></tr>
+      <tr><td class="de">Ding an sich</td><td>coisa em si</td><td>o objeto independente das condições da nossa intuição; incognoscível.</td></tr>
+      <tr><td class="de">Erfahrung</td><td>experiência</td><td>conhecimento empírico de objetos, ligado por categorias.</td></tr>
+      <tr><td class="de">Wahrnehmung</td><td>percepção</td><td>consciência empírica de uma intuição.</td></tr>
+      <tr><td class="de">Urteil</td><td>juízo</td><td>unidade objetiva de conhecimentos dados (B141).</td></tr>
+      <tr><td class="de">Funktion</td><td>função</td><td>unidade da ação de ordenar representações sob uma comum (A68/B93).</td></tr>
+      <tr><td class="de">Kategorie / reiner Verstandesbegriff</td><td>categoria / conceito puro do entendimento</td><td>conceito a priori da unidade sintética do múltiplo em geral.</td></tr>
+      <tr><td class="de">Deduktion</td><td>dedução</td><td>justificação jurídica de uma pretensão, aqui, do direito de uso de um conceito.</td></tr>
+      <tr><td class="de">quid facti / quid juris</td><td>questão de fato / questão de direito</td><td>origem de um conceito / legitimidade de seu uso.</td></tr>
+      <tr><td class="de">Befugnis</td><td>legitimidade; autorização</td><td>o direito de usar um conceito.</td></tr>
+      <tr><td class="de">objektive Gültigkeit</td><td>validade objetiva</td><td>aplicabilidade do conceito a objetos.</td></tr>
+      <tr><td class="de">Spontaneität / Rezeptivität</td><td>espontaneidade / receptividade</td><td>poder de produzir representações por si / de recebê-las.</td></tr>
+      <tr><td class="de">innerer Sinn</td><td>sentido interno</td><td>forma pela qual o espírito intui a si mesmo, no tempo.</td></tr>
+      <tr><td class="de">figürliche Synthesis</td><td>síntese figurada</td><td>síntese do múltiplo da intuição sensível (§24).</td></tr>
+      <tr><td class="de">Apprehension</td><td>apreensão</td><td>percorrer e reunir o múltiplo na intuição.</td></tr>
+      <tr><td class="de">Reproduktion</td><td>reprodução</td><td>reter e trazer de volta representações passadas.</td></tr>
+      <tr><td class="de">Rekognition</td><td>recognição</td><td>reconhecer o reproduzido como idêntico ao apreendido.</td></tr>
+      <tr><td class="de">Affinität</td><td>afinidade</td><td>fundamento objetivo da associação dos fenômenos (A113–114).</td></tr>
+      <tr><td class="de">Epigenesis</td><td>epigênese</td><td>metáfora de Kant para a origem das categorias (B167–168).</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="vazio" id="vazio">Nenhum termo encontrado. Tente outra grafia.</div>
+</div>
+</section>
+
+<!-- Referências -->
+<section id="referencias">
+<div class="wrap">
+  <h2>Referências</h2>
+  <div class="box">
+    <div class="rotulo">Texto de Kant</div>
+    <p><a href="https://www.projekt-gutenberg.org/kant/krvb/index.html">Kritik der reinen Vernunft, 2ª ed. (1787), Projekt Gutenberg</a>. Índice com todos os parágrafos da dedução (§§13–27).</p>
+    <div class="rotulo">Comentário</div>
+    <p><a href="https://plato.stanford.edu/entries/kant-transcendental/">Kant's Transcendental Arguments</a>, Stanford Encyclopedia of Philosophy (seção sobre a Dedução Transcendental).</p>
+    <p><a href="https://plato.stanford.edu/entries/kant-judgment/supplement5.html">Supplement to Kant's Theory of Judgment</a>, SEP (a Dedução B e a teoria do juízo).</p>
+    <p><a href="https://plato.stanford.edu/entries/kant-mind/">Kant's View of the Mind and Consciousness of Self</a>, SEP.</p>
+    <div class="rotulo">Edições em português</div>
+    <p>Crítica da Razão Pura: edição da Fundação Calouste Gulbenkian (trad. Manuela Pinto dos Santos e Alexandre Fradique Morujão); edição da Vozes (trad. Fernando Costa Mattos); edição Abril Cultural, coleção Os Pensadores (trad. Valerio Rohden e Udo Baldur Moosburger). As escolhas de tradução diferem entre elas.</p>
+  </div>
+</div>
+</section>
+
+</main>
+
+<footer>
+<div class="wrap">
+  <p>Material de estudo. As remissões de página seguem a paginação A/B; confira no texto antes de citar. Os exemplos marcados como meus não são de Kant, e as traduções dos trechos em alemão são livres.</p>
+</div>
+</footer>
+
+<script>
+(function(){
+  var campo=document.getElementById('filtro');
+  var linhas=document.querySelectorAll('#tab-glossario tbody tr');
+  var vazio=document.getElementById('vazio');
+  function norm(s){return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');}
+  campo.addEventListener('input',function(){
+    var q=norm(campo.value.trim()),n=0;
+    linhas.forEach(function(tr){
+      var ok=!q||norm(tr.textContent).indexOf(q)>-1;
+      tr.style.display=ok?'':'none';
+      if(ok)n++;
+    });
+    vazio.style.display=n?'none':'block';
+  });
+})();
+</script>
+</body>
+</html>
